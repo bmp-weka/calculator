@@ -11,6 +11,7 @@ export default function CalculatorApp() {
   const [rawPerNode, setRawPerNode] = useState(null);
   const [rawTotal, setRawTotal] = useState(null);
   const [usableCapacity, setUsableCapacity] = useState(null);
+  const [efficiency, setEfficiency] = useState(null);
 
   useEffect(() => {
     const servers = parseFloat(numServers);
@@ -24,6 +25,7 @@ export default function CalculatorApp() {
     let rawPerNodeCapacity = null;
     let rawTotalCapacity = null;
     let totalUsableCapacity = null;
+    let efficiencyValue = null;
 
     if (!isNaN(servers) && !isNaN(nvme)) {
       totalDrives = servers * nvme;
@@ -49,10 +51,15 @@ export default function CalculatorApp() {
         rawTotalCapacity * ((servers - spareValue) / servers) * (dataValue / (dataValue + parityValue)) * 0.9;
     }
 
+    if (!isNaN(totalUsableCapacity) && !isNaN(rawTotalCapacity) && rawTotalCapacity !== 0) {
+      efficiencyValue = totalUsableCapacity / rawTotalCapacity;
+    }
+
     setResult(totalDrives !== null ? `Total Number of drives: ${totalDrives.toLocaleString()}` : null);
     setRawPerNode(rawPerNodeCapacity !== null ? `Raw Per Host Capacity TB: ${rawPerNodeCapacity.toLocaleString()}` : null);
     setRawTotal(rawTotalCapacity !== null ? `Total Raw Capacity TB: ${rawTotalCapacity.toLocaleString()}` : null);
     setUsableCapacity(totalUsableCapacity !== null ? `Total Usable Capacity TB: ${totalUsableCapacity.toLocaleString()}` : null);
+    setEfficiency(efficiencyValue !== null ? `Efficiency: ${(efficiencyValue * 100).toFixed(2)}%` : null);
   }, [numServers, numNVMe, nvmeSize, data, parity, spare]);
 
   return (
@@ -110,9 +117,10 @@ export default function CalculatorApp() {
           />
         </div>
         <div className="flex flex-col space-y-4 bg-[#7A1FA2] p-4 rounded-lg text-white">
-          {result !== null && <p className="text-lg">Total Number of drives: <span className="font-bold">{result.split(': ')[1]}</span></p>}
-          {rawTotal !== null && <p className="text-lg">Total Raw Capacity TB: <span className="font-bold">{rawTotal.split(': ')[1]}</span></p>}
+                    {rawTotal !== null && <p className="text-lg">Total Raw Capacity TB: <span className="font-bold">{rawTotal.split(': ')[1]}</span></p>}
           {usableCapacity !== null && <p className="text-lg">Total Usable Capacity TB: <span className="font-bold">{usableCapacity.split(': ')[1]}</span></p>}
+          {result !== null && <p className="text-lg">Total Number of drives: <span className="font-bold">{result.split(': ')[1]}</span></p>}
+          {efficiency !== null && rawTotal !== null && usableCapacity !== null && <p className="text-lg">Efficiency: <span className="font-bold">{efficiency.split(': ')[1]}</span></p>}
         </div>
       </div>
     </div>
