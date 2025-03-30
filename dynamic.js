@@ -50,9 +50,9 @@ export default function CalculatorApp() {
     }
 
     setResult(totalDrives !== null ? `Total Number of drives: ${totalDrives.toLocaleString()}` : null);
-    setRawPerNode(rawPerNodeCapacity !== null ? `Raw Per Node Capacity TB: ${rawPerNodeCapacity.toLocaleString()}` : null);
-    setRawTotal(rawTotalCapacity !== null ? `Raw Total Capacity TB: ${rawTotalCapacity.toLocaleString()}` : null);
-    setUsableCapacity(totalUsableCapacity !== null ? `Total Usable Capacity TB: ${totalUsableCapacity.toFixed(2)}` : null);
+    setRawPerNode(rawPerNodeCapacity !== null ? `Raw Per Host Capacity TB: ${rawPerNodeCapacity.toLocaleString()}` : null);
+    setRawTotal(rawTotalCapacity !== null ? `Total Raw Capacity TB: ${rawTotalCapacity.toLocaleString()}` : null);
+    setUsableCapacity(totalUsableCapacity !== null ? `Total Usable Capacity TB: ${totalUsableCapacity.toLocaleString()}` : null);
   }, [numServers, numNVMe, nvmeSize, data, parity, spare]);
 
   return (
@@ -109,11 +109,10 @@ export default function CalculatorApp() {
             className="p-2 border rounded-lg"
           />
         </div>
-        <div className="flex flex-col space-y-4">
-          {result !== null && <p className="text-lg">{result}</p>}
-          {rawPerNode !== null && <p className="text-lg">{rawPerNode}</p>}
-          {rawTotal !== null && <p className="text-lg">{rawTotal}</p>}
-          {usableCapacity !== null && <p className="text-lg">{usableCapacity}</p>}
+        <div className="flex flex-col space-y-4 bg-[#7A1FA2] p-4 rounded-lg text-white">
+          {result !== null && <p className="text-lg">Total Number of drives: <span className="font-bold">{result.split(': ')[1]}</span></p>}
+          {rawTotal !== null && <p className="text-lg">Total Raw Capacity TB: <span className="font-bold">{rawTotal.split(': ')[1]}</span></p>}
+          {usableCapacity !== null && <p className="text-lg">Total Usable Capacity TB: <span className="font-bold">{usableCapacity.split(': ')[1]}</span></p>}
         </div>
       </div>
     </div>
